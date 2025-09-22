@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit a Ticket</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 30px; }
+    form { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    input, textarea, button {
+      width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px;
+    }
+    button { background: #0079bf; color: white; cursor: pointer; font-weight: bold; }
+    button:hover { background: #026aa7; }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Submit a Ticket</h2>
+
+  <form id="ticket-form" action="https://formspree.io/f/xrbyzjjj" method="POST">
+    <!-- Hidden field so Formspree knows where to forward -->
+    <input type="hidden" name="_to" value="gussantos4+ytui83dicgauksiqceg2@boards.trello.com">
+
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Describe your issue..." rows="5" required></textarea>
+
+    <button type="submit">Send</button>
+  </form>
+
+  <p id="status" style="text-align:center;margin-top:15px;"></p>
+
+  <script>
+    const form = document.getElementById("ticket-form");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          status.innerText = "✅ Ticket sent successfully!";
+          form.reset();
+        } else {
+          status.innerText = "❌ Error sending ticket.";
+        }
+      } catch (err) {
+        status.innerText = "⚠️ Network error.";
+      }
+    });
+  </script>
+</body>
+</html>
